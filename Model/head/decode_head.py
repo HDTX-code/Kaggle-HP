@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractmethod
 import torch
 import torch.nn as nn
 
-from model.utils import resize
+from Model.utils import resize
 
 
 class BaseDecodeHead(nn.Module):

@@ -3,7 +3,8 @@ import torch
 import torch.nn as nn
 from mmcv.cnn import ConvModule
 
-from model.decode_head import BaseDecodeHead
+from Model.head.decode_head import BaseDecodeHead
+from Model.utils import weights_init
 
 
 class FCNHead(BaseDecodeHead):
@@ -94,6 +95,20 @@ class FCNHead(BaseDecodeHead):
         return output
 
 
+def get_fcn_head(cfg, init=None):
+    model = FCNHead(**cfg)
+    if init is not None:
+        weights_init(model, init)
+    return model
+
+
+def test():
+    model = get_fcn_head(cfg)
+    Input = tuple(torch.ones(x) for x in X)
+    t = model(Input)
+    print(t.shape)
+
+
 if __name__ == '__main__':
     norm_cfg = dict(type='BN', requires_grad=True)
     X = ([4, 128, 56, 56], [4, 256, 28, 28], [4, 512, 14, 14], [4, 1024, 7, 7])
@@ -107,7 +122,4 @@ if __name__ == '__main__':
         num_classes=19,
         norm_cfg=norm_cfg,
         align_corners=False)
-    FCNHead = FCNHead(**cfg)
-    Input = tuple(torch.ones(x) for x in X)
-    print(FCNHead(Input)[0].shape)
-
+    test()

@@ -28,7 +28,7 @@ def resize(input,
 
 
 # 模型参数初始化
-def weights_init(net, init_type='normal', init_gain=0.02):
+def weights_init(net, net_name: str, init_type='normal', init_gain=0.02):
     def init_func(m):
         classname = m.__class__.__name__
         if hasattr(m, 'weight') and classname.find('Conv') != -1:
@@ -46,7 +46,7 @@ def weights_init(net, init_type='normal', init_gain=0.02):
             torch.nn.init.normal_(m.weight.data, 1.0, 0.02)
             torch.nn.init.constant_(m.bias.data, 0.0)
 
-    print('initialize network with %s type' % init_type)
+    print('initialize {} with {} type'.format(net_name, init_type))
     net.apply(init_func)
 
 
@@ -56,3 +56,4 @@ def pth_replace(pth_url, rep_need, rep_to=''):
     for key in list(dict_p.keys()):
         dict_p[str(key).replace(rep_need, rep_to)] = dict_p.pop(key)
     return dict_p
+

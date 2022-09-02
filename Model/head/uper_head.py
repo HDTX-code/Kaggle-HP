@@ -3,8 +3,8 @@ import torch
 import torch.nn as nn
 from mmcv.cnn import ConvModule
 
-from model.decode_head import BaseDecodeHead
-from model.utils import resize
+from Model.head.decode_head import BaseDecodeHead
+from Model.utils import resize, weights_init
 
 
 class PPM(nn.ModuleList):
@@ -189,6 +189,20 @@ class UPerHead(BaseDecodeHead):
         return output
 
 
+def get_uper_head(cfg, init=None):
+    model = UPerHead(**cfg)
+    if init is not None:
+        weights_init(model, init)
+    return model
+
+
+def test():
+    model = get_uper_head(cfg)
+    Input = tuple(torch.ones(x) for x in X)
+    t = model(Input)
+    print(t.shape)
+
+
 if __name__ == '__main__':
     X = ([3, 128, 56, 56], [3, 256, 28, 28], [3, 512, 14, 14], [3, 1024, 7, 7])
     norm_cfg = dict(type='BN', requires_grad=True)
@@ -201,6 +215,4 @@ if __name__ == '__main__':
         num_classes=19,
         norm_cfg=norm_cfg,
         align_corners=False)
-    UPerHead = UPerHead(**cfg)
-    Input = tuple(torch.ones(x) for x in X)
-    print(UPerHead(Input)[2].shape)
+    test()

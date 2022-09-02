@@ -10,7 +10,7 @@ from mmcv.cnn.bricks import (NORM_LAYERS, DropPath, build_activation_layer,
                              build_norm_layer)
 from mmcv.runner.base_module import ModuleList, Sequential
 
-from model.utils import pth_replace, weights_init
+from Model.utils import pth_replace, weights_init
 
 
 @NORM_LAYERS.register_module('LN2d')
@@ -139,7 +139,7 @@ class ConvNeXt(nn.Module):
     <https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/convnext.py>`_.
 
     Args:
-        arch (str | dict): The model's architecture. If string, it should be
+        arch (str | dict): The Model's architecture. If string, it should be
             one of architecture in ``ConvNeXt.arch_settings``. And if dict, it
             should include the following two keys:
 
@@ -325,32 +325,30 @@ class ConvNeXt(nn.Module):
                 param.requires_grad = False
 
 
+def get_ConvNeXt(cfg, pre_url=None, init=None):
+    model = ConvNeXt(**cfg)
+    if init is not None:
+        weights_init(model, init)
+    if pre_url is not None:
+        model.load_state_dict(pth_replace(pre_url, 'backbone'), strict=False)
+    return model
+
+
+def test():
+    cfg = dict(
+        arch='base',
+        out_indices=[0, 1, 2, 3],
+        drop_path_rate=0.4,
+        layer_scale_init_value=1.0,
+        gap_before_final_norm=False)
+    x = torch.ones([1, 3, 2048, 2048])
+    model = get_ConvNeXt(cfg)
+    t = model(x)
+    print("tuple length: " + str(len(t)) + '\n')
+    [print(x.shape) for x in t]
+
+
 if __name__ == '__main__':
     # checkpoint_file = 'https://download.openmmlab.com/mmclassification/v0/convnext/downstream/convnext-base_3rdparty_32xb128-noema_in1k_20220301-2a0ee547.pth'  # noqa
 
-
-    def get_ConvNeXt(cfg, pre_url=None, init=None):
-        model = ConvNeXt(**cfg)
-        if init is not None:
-            weights_init(model, init)
-        if pre_url is not None:
-            model.load_state_dict(pth_replace(pre_url, 'backbone'), strict=False)
-        return model
-
-    def test():
-        cfg = dict(
-            arch='base',
-            out_indices=[0, 1, 2, 3],
-            drop_path_rate=0.4,
-            layer_scale_init_value=1.0,
-            gap_before_final_norm=False)
-        x = torch.ones([1, 3, 224, 224])
-        model = get_ConvNeXt(cfg)
-        t = model(x)
-        print("tuple length: " + str(len(t)) + '\n')
-        [print(x.shape) for x in t]
-
     test()
-
-
-
