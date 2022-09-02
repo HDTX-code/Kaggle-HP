@@ -192,7 +192,7 @@ class UPerHead(BaseDecodeHead):
 def get_uper_head(cfg, init=None):
     model = UPerHead(**cfg)
     if init is not None:
-        weights_init(model, init)
+        weights_init(model, 'UPerHead', init)
     return model
 
 

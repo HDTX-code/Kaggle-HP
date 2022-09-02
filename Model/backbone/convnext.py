@@ -328,7 +328,7 @@ class ConvNeXt(nn.Module):
 def get_ConvNeXt(cfg, pre_url=None, init=None):
     model = ConvNeXt(**cfg)
     if init is not None:
-        weights_init(model, init)
+        weights_init(model, "ConvNeXt", init)
     if pre_url is not None:
         model.load_state_dict(pth_replace(pre_url, 'backbone'), strict=False)
     return model

@@ -98,7 +98,7 @@ class FCNHead(BaseDecodeHead):
 def get_fcn_head(cfg, init=None):
     model = FCNHead(**cfg)
     if init is not None:
-        weights_init(model, init)
+        weights_init(model, 'FCNHead', init)
     return model
 
 
