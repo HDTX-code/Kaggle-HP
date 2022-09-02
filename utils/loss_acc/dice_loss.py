@@ -58,7 +58,7 @@ def dice_loss(x: torch.Tensor, target: torch.Tensor, multiclass: bool = False, i
 
 
 def Mutil_label_dice_loss(x: torch.Tensor, target: torch.Tensor, ignore_index: int = 255):
-    x = F.sigmoid(x)
+    # x = torch.sigmoid(x)
     assert x.shape == target.shape
     dice_loss = torch.zeros([1])
     for c in range(x.shape[1]):
