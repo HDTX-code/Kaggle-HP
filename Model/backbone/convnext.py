@@ -325,7 +325,7 @@ class ConvNeXt(nn.Module):
                 param.requires_grad = False
 
 
-def get_ConvNeXt(cfg, pre_url=None, init=None):
+def get_ConvNeXt(pre_url=None, init=None):
     model = ConvNeXt(**cfg)
     if init is not None:
         weights_init(model, "ConvNeXt", init)

@@ -106,20 +106,12 @@ class SegModel(nn.Module):
         return output, aux_output
 
 
-def test(cfg):
-    model = SegModel([128, 128], cfg).train()
-    x = torch.ones([3, 3, 32, 32])
-    output, aux_output = model(x)
-    print(output.shape)
-    print(aux_output.shape)
-
-
-if __name__ == '__main__':
+def test():
     norm_cfg = dict(type='BN', requires_grad=True)
     num_classes = 5
     cfg = dict(
         backbone=dict(
-            pre_url=r"D:\edge\convnext-base_3rdparty_32xb128-noema_in1k_20220301-2a0ee547.pth",
+            pre_url=r"../checkpoints/pretrain/convnext-base_3rdparty_32xb128-noema_in1k_20220301-2a0ee547.pth",
             type='ConvNeXt',
             arch='base',
             out_indices=[0, 1, 2, 3],
@@ -150,4 +142,13 @@ if __name__ == '__main__':
             norm_cfg=norm_cfg,
             align_corners=False)
     )
-    test(cfg)
+    model = SegModel([128, 128], cfg).train()
+    x = torch.ones([3, 3, 32, 32])
+    output, aux_output = model(x)
+    print(output.shape)
+    print(aux_output.shape)
+    return model
+
+
+if __name__ == '__main__':
+    test()

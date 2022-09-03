@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
 
-from utils.loss_acc.bce_loss import binary_cross_entropy
-from utils.loss_acc.dice_loss import Mutil_label_dice_loss
-from utils.loss_acc.lovasz_loss import lovasz_hinge_flat
+from loss_acc.bce_loss import binary_cross_entropy
+from loss_acc.dice_loss import Mutil_label_dice_loss
+from loss_acc.lovasz_loss import lovasz_hinge_flat
 
 
 class SegLoss(nn.Module):
